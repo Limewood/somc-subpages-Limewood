@@ -1,0 +1,57 @@
+@CHARSET "UTF-8";
+
+/* CSS for Wordpress plugin somc-subpages-Limewood */
+
+#somcList ul, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#somcList div {
+    margin: 0;
+    display: block;
+    background-color: #ffffff;
+    color: #000000;
+    font-family: "Helvetica neue","Helvetica",Arial,Tahoma,Verdana,sans-serif
+}
+#somcList div > p {
+    background-color: #000000;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 3px;
+    border-bottom: 1px solid #ffffff;
+}
+#somcList div > img {
+	float: right;
+	padding: 3px;
+}
+#somcList div:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+#somcList li {
+    line-height: 140%;
+    text-indent: 0px;
+    padding-left: 10px;
+}
+
+#somcList div.somcSort {
+	clear: both;
+	display: block;
+	padding: 3px;
+	background-color: #CDCDCD;
+	cursor: pointer;
+	height: 28px;
+	background-position: 4px, 2px;
+	background-repeat: no-repeat;
+}
+#somcList div.somcSort.asc {
+	background-image: url("../img/down.png");
+}
+#somcList div.somcSort.desc {
+	background-image: url("../img/up.png");
+}

@@ -1,0 +1,117 @@
+<?php
+/**
+ * Plugin Name: somc-subpages-Limewood
+ * Description: A plugin to display all subpages of the current page
+ * Version: 1.0
+ * Author: Joakim Lindskog
+ * License: Apache 2.0
+ */
+
+class Somc_Subpages_Limewood extends WP_Widget {
+	
+	function Somc_Subpages_Limewood() {
+		// Widget options
+		$widget_ops = array(
+			'classname' => 'somcsubpageslimewood',
+			'description' => 'Displays all subpages of the current page'	
+		);
+		// Admin control options
+		$control_ops = array(
+			'id_base' => 'somcsubpageslimewood-widget'
+		);
+		
+		$this->WP_Widget('somcsubpageslimewood-widget',
+				 'Display subpages of page',
+				$widget_ops, $control_ops);
+	}
+	
+	/**
+	 * Displays the widget
+	 * @param unknown $args arguments
+	 * @param unknown $instance widget instance
+	 */
+	function widget($args, $instance) {
+		global $post;
+		$args = array(
+			'post_parent' => $post->ID,
+			'post_type' => 'page',
+			'order' => 'ASC'
+		);
+		echo '<ul id="somcList">';
+		// Get children of post
+		$children = get_children($args);
+		// Recursively print all descendants
+		foreach ( $children as $child ) {
+			$this->print_descendants($child, $args);
+		}
+		echo '</ul>';
+	}
+	
+	/**
+	 * Prints all descendant subposts of the specified post
+	 * @param unknown $post the parent post
+	 * @param unknown $args arguments for get_children
+	 */
+	private function print_descendants($post, $args) {
+		// Print this post first
+		echo '<li>';
+		$this->print_post($post);
+		// Set new parent post id
+		$args['post_parent'] = $post->ID;
+		// Get children of post
+		$children = get_children($args);
+		if ( count($children) > 0 ) {
+			// Create a new list for the children
+			echo '<ul>';
+			foreach ( $children as $child ) {
+				// Print all descendants
+				$this->print_descendants($child, $args);
+			}
+			echo '</ul>';
+		}
+		echo '</li>';
+	}
+	
+	/**
+	 * Prints consice information about the specified post
+	 * @param unknown $post the post
+	 */
+	private function print_post($post) {
+		$image = wp_get_attachment_image( get_post_thumbnail_id( $post->ID ), 'thumbnail' );
+		// Truncate to 20 characters
+		echo '<div><p class="somcTitle">'.substr($post->post_title, 0, 20).'</p>'
+				.$image.'<div class="somcSort"></div></div>';
+	}
+}
+	
+function somc_subpages_limewood_load_widget() {
+	register_widget('Somc_Subpages_Limewood');
+}
+
+/**
+ * Prints the widget
+ */
+function print_widget() {
+	ob_start();
+	the_widget('Somc_Subpages_Limewood');
+	$contents = ob_get_clean();
+	echo $contents;
+}
+
+/**
+ * Registers style sheet
+*/
+function register_scripts() {
+	wp_register_style( 'somc-subpages-Limewood', plugins_url( 'somc-subpages-Limewood/css/somc-subpages-Limewood.css' ) );
+	wp_enqueue_style( 'somc-subpages-Limewood' );
+	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script( 'somc-subpages-Limewood', plugins_url( 'somc-subpages-Limewood/js/somc-subpages-Limewood.js', array('jquery') ) );
+}
+
+add_action( 'widgets_init', 'somc_subpages_limewood_load_widget' );
+// Add shortcode
+add_shortcode( 'somc-subpages-Limewood', 'print_widget' );
+// Register style sheet.
+add_action( 'wp_enqueue_scripts', 'register_scripts' );
+
+?>
