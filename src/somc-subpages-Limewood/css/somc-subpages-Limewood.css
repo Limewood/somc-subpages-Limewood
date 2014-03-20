@@ -55,3 +55,7 @@
 #somcList div.somcSort.desc {
 	background-image: url("../img/up.png");
 }
+
+.somcSubpagesLimewoodTitle {
+	font-weight: bold;
+}

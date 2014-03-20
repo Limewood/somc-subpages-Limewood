@@ -37,6 +37,9 @@ class Somc_Subpages_Limewood extends WP_Widget {
 			'post_type' => 'page',
 			'order' => 'ASC'
 		);
+		echo $before_widget;
+		echo $before_title.'<p class="somcSubpagesLimewoodTitle">'
+				.'Subpages of this page</p>'.$after_title;
 		echo '<ul id="somcList">';
 		// Get children of post
 		$children = get_children($args);
@@ -45,6 +48,7 @@ class Somc_Subpages_Limewood extends WP_Widget {
 			$this->print_descendants($child, $args);
 		}
 		echo '</ul>';
+		echo $after_widget;
 	}
 	
 	/**
