@@ -39,15 +39,19 @@ class Somc_Subpages_Limewood extends WP_Widget {
 		);
 		echo $before_widget;
 		echo $before_title.'<p class="somcSubpagesLimewoodTitle">'
-				.'Subpages of this page</p>'.$after_title;
-		echo '<ul id="somcList">';
+				.__('Subpages of this page', 'somc-subpages-Limewood').'</p>'.$after_title;
 		// Get children of post
 		$children = get_children($args);
-		// Recursively print all descendants
-		foreach ( $children as $child ) {
-			$this->print_descendants($child, $args);
+		if( count($children) > 0 ) {
+			echo '<ul id="somcList">';
+			// Recursively print all descendants
+			foreach ( $children as $child ) {
+				$this->print_descendants($child, $args);
+			}
+			echo '</ul>';
+		} else {
+			echo '<p>'.__('No subpages found!', 'somc-subpages-Limewood').'</p>';
 		}
-		echo '</ul>';
 		echo $after_widget;
 	}
 	
@@ -112,10 +116,16 @@ function register_scripts() {
 	wp_enqueue_script( 'somc-subpages-Limewood', plugins_url( 'somc-subpages-Limewood/js/somc-subpages-Limewood.js' ), array('jquery') );
 }
 
+function set_textdomain() {
+	load_plugin_textdomain( 'somc-subpages-Limewood', false, 'somc-subpages-Limewood/languages/' );
+}
+
 add_action( 'widgets_init', 'somc_subpages_limewood_load_widget' );
 // Add shortcode
 add_shortcode( 'somc-subpages-Limewood', 'print_widget' );
 // Register style sheet.
 add_action( 'wp_enqueue_scripts', 'register_scripts' );
+// Load textdomain
+add_action( 'plugins_loaded', 'set_textdomain' );
 
 ?>
